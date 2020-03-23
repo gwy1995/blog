@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gwy1995.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="模板引擎在web开发中十分常见，用python实现的模板引擎有很多种，如jinja2、mako,很多web框架也自带模板引擎，如tornado、django等。模板是为了将视图与数据分离而出现的，模板引擎是为了将包含小部分逻辑和大量文本数据的工作简化而诞生的.在研究模板引擎的时候发现的一段很有意思的话，来自Ned Batchelder  Most programs contain a lot of">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模板引擎">
+<meta property="og:url" content="https://gwy1995.cn/2018/12/28/template-engine/index.html">
+<meta property="og:site_name" content="Zero Space">
+<meta property="og:description" content="模板引擎在web开发中十分常见，用python实现的模板引擎有很多种，如jinja2、mako,很多web框架也自带模板引擎，如tornado、django等。模板是为了将视图与数据分离而出现的，模板引擎是为了将包含小部分逻辑和大量文本数据的工作简化而诞生的.在研究模板引擎的时候发现的一段很有意思的话，来自Ned Batchelder  Most programs contain a lot of">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-28T07:32:05.000Z">
+<meta property="article:modified_time" content="2020-03-23T01:01:57.364Z">
+<meta property="article:author" content="Zero">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gwy1995.cn/2018/12/28/template-engine/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>模板引擎 | Zero Space</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zero Space</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Look up to the sky</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gwy1995.cn/2018/12/28/template-engine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Zero">
+      <meta itemprop="description" content="A learner">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zero Space">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          模板引擎
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-28 15:32:05" itemprop="dateCreated datePublished" datetime="2018-12-28T15:32:05+08:00">2018-12-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-23 09:01:57" itemprop="dateModified" datetime="2020-03-23T09:01:57+08:00">2020-03-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>模板引擎在<code>web</code>开发中十分常见，用<code>python</code>实现的模板引擎有很多种，如<code>jinja2</code>、<code>mako</code>,很多<code>web</code>框架也自带模板引擎，如<code>tornado</code>、<code>django</code>等。模板是为了将视图与数据分离而出现的，模板引擎是为了将包含小部分逻辑和大量文本数据的工作简化而诞生的.<br>在研究模板引擎的时候发现的一段很有意思的话，来自<a href="http://aosabook.org/en/500L/a-template-engine.html" target="_blank" rel="noopener">Ned Batchelder</a></p>
+<blockquote>
+<p>Most programs contain a lot of logic, and a little bit of literal textual data. Programming languages are designed to be good for this sort of programming. But some programming tasks involve only a little bit of logic, and a great deal of textual data. For these tasks, we’d like to have a tool better suited to these text-heavy problems. A template engine is such a tool.</p>
+</blockquote>
+<a id="more"></a>
+<p>模板引擎主要实现了这样的功能：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PAGE_HTML = <span class="string">"""</span></span><br><span class="line"><span class="string">&lt;html&gt;</span></span><br><span class="line"><span class="string">  &lt;p&gt;Hello, &#123;&#123; username &#125;&#125;!&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;p&gt;here are some lessons&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;ul&gt;</span></span><br><span class="line"><span class="string">    &#123;% for lesson in lessons %&#125;</span></span><br><span class="line"><span class="string">      &lt;li&gt;&#123;&#123; lesson &#125;&#125;&lt;/li&gt;</span></span><br><span class="line"><span class="string">    &#123;% end %&#125;</span></span><br><span class="line"><span class="string">  &lt;/ul&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line">t = Template(PAGE_HTML)</span><br><span class="line">result = t.render(username=<span class="string">"zero"</span>, lessons=[<span class="string">"math"</span>, <span class="string">"physics"</span>, <span class="string">"computer science"</span>])</span><br><span class="line">print(result)</span><br><span class="line"><span class="comment"># result</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">&lt;html&gt;</span></span><br><span class="line"><span class="string">  &lt;p&gt;Hello, zero!&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;p&gt;here are some lessons&lt;/p&gt;</span></span><br><span class="line"><span class="string">  &lt;ul&gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">      &lt;li&gt;math&lt;/li&gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">      &lt;li&gt;physics&lt;/li&gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">      &lt;li&gt;computer science&lt;/li&gt;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">  &lt;/ul&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+
+<p>模板引擎的工作原理与编译原理有些相似，主要分几个步骤：</p>
+<h3 id="1-解析模板："><a href="#1-解析模板：" class="headerlink" title="1. 解析模板："></a>1. 解析模板：</h3><p>读入模板文件，将字符流解析成一个个<code>token</code>,主要根据一些定义好的语法标记，如<code>{ { expression } }</code>,<code>{ % block % }</code>,``,将文本切分为一个个标记，如上面的模板将切分成:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    <span class="string">'\n&lt;html&gt;\n  &lt;p&gt;Hello, '</span>, <span class="comment"># text</span></span><br><span class="line">    <span class="string">'&#123; &#123; username &#125; &#125;'</span>, <span class="comment"># expression</span></span><br><span class="line">    <span class="string">'!&lt;/p&gt;\n  &lt;p&gt;here are some lessons&lt;/p&gt;\n  &lt;ul&gt;\n    '</span>, <span class="comment"># text</span></span><br><span class="line">    <span class="string">'&#123; % for lesson in lessons % &#125;'</span>, <span class="comment"># block start</span></span><br><span class="line">    <span class="string">'\n      &lt;li&gt;'</span>, <span class="comment"># text</span></span><br><span class="line">    <span class="string">'&#123; &#123; lesson &#125; &#125; '</span>, <span class="comment"># expression</span></span><br><span class="line">    <span class="string">'&lt;/li&gt;\n    '</span>, <span class="comment"># text</span></span><br><span class="line">    <span class="string">'&#123; % end % &#125;'</span>, <span class="comment"># block end</span></span><br><span class="line">    <span class="string">'\n  &lt;/ul&gt;\n&lt;/html&gt;\n\n'</span> <span class="comment"># text</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-生成代码："><a href="#2-生成代码：" class="headerlink" title="2. 生成代码："></a>2. 生成代码：</h3><p>生成编译代码，对应每一种<code>token</code>，生成对应的实现代码，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_execute</span><span class="params">()</span>:</span></span><br><span class="line">    _buff=list()</span><br><span class="line">    _buff.append(<span class="string">'\n&lt;html&gt;\n  &lt;p&gt;Hello, '</span>)</span><br><span class="line">    _buff.append(username)</span><br><span class="line">    _buff.append(<span class="string">'!&lt;/p&gt;\n  &lt;p&gt;here are some lessons&lt;/p&gt;\n  &lt;ul&gt;\n    '</span>)</span><br><span class="line">    <span class="keyword">for</span> lesson <span class="keyword">in</span> lessons:</span><br><span class="line">        _buff.append(<span class="string">'\n      &lt;li&gt;'</span>)</span><br><span class="line">        _buff.append(lesson)</span><br><span class="line">        _buff.append(<span class="string">'&lt;/li&gt;\n    '</span>)</span><br><span class="line">    _buff.append(<span class="string">'\n  &lt;/ul&gt;\n&lt;/html&gt;\n\n'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join(_buff)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-将数据填入上下文环境环境，执行编译代码"><a href="#3-将数据填入上下文环境环境，执行编译代码" class="headerlink" title="3. 将数据填入上下文环境环境，执行编译代码:"></a>3. 将数据填入上下文环境环境，执行编译代码:</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">render</span><span class="params">(execute_function,**context)</span>:</span></span><br><span class="line">    namespace = dict()</span><br><span class="line">    namespace.update(context)</span><br><span class="line">    code = compile(execute_function(), <span class="string">"&lt;string&gt;"</span>, <span class="string">"exec"</span>, dont_inherit=<span class="literal">True</span>)</span><br><span class="line">    exec(code, namespace)</span><br><span class="line">    execute = namespace[<span class="string">"_execute"</span>]</span><br><span class="line">    <span class="keyword">return</span> execute()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/14/regexp1/" rel="prev" title="正则表达式--零宽断言">
+      <i class="fa fa-chevron-left"></i> 正则表达式--零宽断言
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/03/13/data-skew/" rel="next" title="数据倾斜">
+      数据倾斜 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-解析模板："><span class="nav-number">1.</span> <span class="nav-text">1. 解析模板：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-生成代码："><span class="nav-number">2.</span> <span class="nav-text">2. 生成代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-将数据填入上下文环境环境，执行编译代码"><span class="nav-number">3.</span> <span class="nav-text">3. 将数据填入上下文环境环境，执行编译代码:</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zero"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Zero</p>
+  <div class="site-description" itemprop="description">A learner</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备18042368号-1 </a>
+      <img src="/images/备案图标.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zero</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

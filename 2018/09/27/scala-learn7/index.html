@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gwy1995.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="类使用抽象类scala语法中有traits(特征)，trait比abstract class(抽象类)复杂的多。 因此在scala中使用抽象类的场景不多，主要有两个场景:  需要创建一个有构造体变量的基础类 会被java代码调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala学习笔记7">
+<meta property="og:url" content="https://gwy1995.cn/2018/09/27/scala-learn7/index.html">
+<meta property="og:site_name" content="Zero Space">
+<meta property="og:description" content="类使用抽象类scala语法中有traits(特征)，trait比abstract class(抽象类)复杂的多。 因此在scala中使用抽象类的场景不多，主要有两个场景:  需要创建一个有构造体变量的基础类 会被java代码调用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-09-27T09:36:17.000Z">
+<meta property="article:modified_time" content="2020-03-23T01:01:57.357Z">
+<meta property="article:author" content="Zero">
+<meta property="article:tag" content="scala">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gwy1995.cn/2018/09/27/scala-learn7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>scala学习笔记7 | Zero Space</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zero Space</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Look up to the sky</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gwy1995.cn/2018/09/27/scala-learn7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Zero">
+      <meta itemprop="description" content="A learner">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zero Space">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          scala学习笔记7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-09-27 17:36:17" itemprop="dateCreated datePublished" datetime="2018-09-27T17:36:17+08:00">2018-09-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-23 09:01:57" itemprop="dateModified" datetime="2020-03-23T09:01:57+08:00">2020-03-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><h3 id="使用抽象类"><a href="#使用抽象类" class="headerlink" title="使用抽象类"></a>使用抽象类</h3><p><code>scala</code>语法中有<code>traits</code>(特征)，<code>trait</code>比<code>abstract class</code>(抽象类)复杂的多。</p>
+<p>因此在scala中使用抽象类的场景不多，主要有两个场景:</p>
+<ul>
+<li>需要创建一个有构造体变量的基础类</li>
+<li>会被<code>java</code>代码调用<a id="more"></a>
+第一个场景是因为<code>traits</code>不允许构造体参数。<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这将不能通过编译</span></span><br><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Animal</span>(<span class="params">name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">//这时需要使用抽象类</span></span></span><br><span class="line"><span class="class"><span class="title">abstract</span> <span class="title">class</span> <span class="title">Animal</span>(<span class="params">name: <span class="type">String</span></span>)</span></span><br></pre></td></tr></table></figure>
+第二个场景是因为<code>scala</code>带实现方法的<code>trait</code>不能被<code>Java</code>代码调用。如解决这个问题的方法在以后讨论。</li>
+</ul>
+<p>需要知道的是：一个类只能被一个抽象类拓展。</p>
+<h3 id="在抽象类（或特征）中定义属性"><a href="#在抽象类（或特征）中定义属性" class="headerlink" title="在抽象类（或特征）中定义属性"></a>在抽象类（或特征）中定义属性</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Pet</span>(<span class="params">name: <span class="type">String</span></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">val</span> greeting: <span class="type">String</span></span><br><span class="line">	<span class="keyword">var</span> age: <span class="type">Int</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">sayHello</span> </span>&#123; println(greeting) &#125;</span><br><span class="line">	<span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span> </span>= <span class="string">s"I say <span class="subst">$greeting</span>, and I'm <span class="subst">$age</span>"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> (<span class="params">name:<span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Pet</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">val</span> greeting = <span class="string">"Woof"</span></span><br><span class="line">	<span class="keyword">var</span> age = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> (<span class="params">name:<span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">Pet</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">val</span> greeting = <span class="string">"Meow"</span></span><br><span class="line">	<span class="keyword">var</span> age = <span class="number">5</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> dog = <span class="keyword">new</span> <span class="type">Dog</span>(<span class="string">"Fido"</span>)</span><br><span class="line"><span class="keyword">val</span> cat = <span class="keyword">new</span> <span class="type">Cat</span>(<span class="string">"Morris"</span>)</span><br><span class="line">dog.sayHello</span><br><span class="line">cat.sayHello</span><br><span class="line">println(dog)</span><br><span class="line">println(cat)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用Case-Class生成样板代码"><a href="#使用Case-Class生成样板代码" class="headerlink" title="使用Case Class生成样板代码"></a>使用Case Class生成样板代码</h3><p>当使用<code>match</code>表达式，<code>actors</code>或其他场景时，我们需要是用<code>case class</code>来生成样板代码，使用<code>case class</code>能直接生成<code>setter</code>和<code>getter</code>方法，以及<code>apply</code>、<code>unapply</code>、<code>toString</code>、<code>equals</code>、<code>hashCode</code>等方法。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// name and relation are 'val' by default</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name: <span class="type">String</span>, relation: <span class="type">String</span></span>)</span></span><br></pre></td></tr></table></figure>
+<p>定义一个<code>case class</code>时，很多方法代码都会自动生成：</p>
+<ul>
+<li><code>apply</code>方法，在生成类的实例时不需要使用<code>new</code>关键词</li>
+<li>对于<code>val</code>变量自动生成取值方法，对于<code>var</code>变量自动生成取值和设置方法。</li>
+<li>一个不错的<code>toString</code>方法</li>
+<li><code>unapply</code>方法，可以使用<code>match</code>表达式</li>
+<li><code>equals</code>和<code>hashCode</code>方法</li>
+<li><code>copy</code>方法</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span>(<span class="params">name: <span class="type">String</span>, relation: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">//不需要new关键词</span></span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">emily</span> </span>= <span class="type">Person</span>(<span class="string">"Emily"</span>, <span class="string">"niece"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//取值方法</span></span><br><span class="line">emily.name</span><br><span class="line"></span><br><span class="line"><span class="comment">//对于var变量还会生成设置方法</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Company</span> (<span class="params">var name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">c</span> </span>= <span class="type">Company</span>(<span class="string">"Mat-Su Valley Programming"</span>)</span><br><span class="line">c.name</span><br><span class="line">c.name = <span class="string">"Valley Programming"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//toString方法</span></span><br><span class="line">emily</span><br><span class="line"></span><br><span class="line"><span class="comment">//unapply方法</span></span><br><span class="line">emily <span class="keyword">match</span> &#123; <span class="keyword">case</span> <span class="type">Person</span>(n, r) =&gt; println(n, r) &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//equals和hashCode方法</span></span><br><span class="line"><span class="keyword">val</span> hannah = <span class="type">Person</span>(<span class="string">"Hannah"</span>, <span class="string">"niece"</span>)</span><br><span class="line">emily == hannah</span><br><span class="line"></span><br><span class="line"><span class="comment">//copy方法</span></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span>(<span class="params">name: <span class="type">String</span>, loc: <span class="type">String</span>, role: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class"><span class="title">val</span> <span class="title">fred</span> </span>= <span class="type">Employee</span>(<span class="string">"Fred"</span>, <span class="string">"Anchorage"</span>, <span class="string">"Salesman"</span>)</span><br><span class="line"><span class="keyword">val</span> joe = fred.copy(name=<span class="string">"Joe"</span>, role=<span class="string">"Mechanic"</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="定义一个equals方法"><a href="#定义一个equals方法" class="headerlink" title="定义一个equals方法"></a>定义一个<code>equals</code>方法</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> (<span class="params">name: <span class="type">String</span>, age: <span class="type">Int</span></span>) </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">canEqual</span></span>(a: <span class="type">Any</span>) = a.isInstanceOf[<span class="type">Person</span>]</span><br><span class="line">	<span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">equals</span></span>(that: <span class="type">Any</span>): <span class="type">Boolean</span> = that <span class="keyword">match</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> that: <span class="type">Person</span> =&gt; that.canEqual(<span class="keyword">this</span>) &amp;&amp; <span class="keyword">this</span>.hashCode == that.hashCode</span><br><span class="line">		<span class="keyword">case</span> _ =&gt; <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">hashCode</span></span>:<span class="type">Int</span> = &#123;</span><br><span class="line">		<span class="keyword">val</span> prime = <span class="number">31</span></span><br><span class="line">		<span class="keyword">var</span> result = <span class="number">1</span></span><br><span class="line">		result = prime * result + age;</span><br><span class="line">		result = prime * result + (<span class="keyword">if</span> (name == <span class="literal">null</span>) <span class="number">0</span> <span class="keyword">else</span> name.hashCode)</span><br><span class="line">		<span class="keyword">return</span> result</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是一种用<code>hashCode</code>方法定义<code>equals</code>方法。<br>有了<code>equals</code>方法，就可以用<code>==</code>比较实例</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> nimoy = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Leonard Nimoy"</span>, <span class="number">82</span>)</span><br><span class="line"><span class="keyword">val</span> nimoy2 = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Leonard Nimoy"</span>, <span class="number">82</span>) </span><br><span class="line"><span class="keyword">val</span> shatner = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"William Shatner"</span>, <span class="number">82</span>) </span><br><span class="line"><span class="keyword">val</span> ed = <span class="keyword">new</span> <span class="type">Person</span>(<span class="string">"Ed Chigliak"</span>, <span class="number">20</span>)</span><br><span class="line">nimoy == nimoy</span><br><span class="line">nimoy == nimoy2</span><br><span class="line">nimoy2 == nimoy</span><br><span class="line">nimoy != shatner</span><br><span class="line">shatner != nimoy</span><br><span class="line">nimoy != <span class="literal">null</span></span><br><span class="line">nimoy != ed</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建内部类"><a href="#创建内部类" class="headerlink" title="创建内部类"></a>创建内部类</h3><p>创建内部类可以其接触外部的API或者被其他代码引用。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PandorasBox</span> </span>&#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">Thing</span> (<span class="params">name: <span class="type">String</span></span>)</span></span><br><span class="line"><span class="class">	<span class="title">var</span> <span class="title">things</span> </span>= <span class="keyword">new</span> collection.mutable.<span class="type">ArrayBuffer</span>[<span class="type">Thing</span>]() </span><br><span class="line">	things += <span class="type">Thing</span>(<span class="string">"Evil Thing #1"</span>)</span><br><span class="line">	things += <span class="type">Thing</span>(<span class="string">"Evil Thing #2"</span>)</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">addThing</span></span>(name: <span class="type">String</span>) &#123; things += <span class="keyword">new</span> <span class="type">Thing</span>(name) &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">val</span> p = <span class="keyword">new</span> <span class="type">PandorasBox</span></span><br><span class="line">p.things.foreach(println)</span><br><span class="line">p.addThing(<span class="string">"Evil Thing #3"</span>)</span><br><span class="line">p.addThing(<span class="string">"Evil Thing #4"</span>)</span><br></pre></td></tr></table></figure>
+<p>在PandorasBox类外部是没有Thing这个类的，<code>val x=new Thing()</code>会报错。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/scala/" rel="tag"># scala</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/09/19/scala-learn6/" rel="prev" title="scala学习笔记6">
+      <i class="fa fa-chevron-left"></i> scala学习笔记6
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/22/ssh-config/" rel="next" title="服务器上用ssh连接多个git账号">
+      服务器上用ssh连接多个git账号 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类"><span class="nav-number">1.</span> <span class="nav-text">类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用抽象类"><span class="nav-number">1.1.</span> <span class="nav-text">使用抽象类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在抽象类（或特征）中定义属性"><span class="nav-number">1.2.</span> <span class="nav-text">在抽象类（或特征）中定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Case-Class生成样板代码"><span class="nav-number">1.3.</span> <span class="nav-text">使用Case Class生成样板代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义一个equals方法"><span class="nav-number">1.4.</span> <span class="nav-text">定义一个equals方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建内部类"><span class="nav-number">1.5.</span> <span class="nav-text">创建内部类</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zero"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Zero</p>
+  <div class="site-description" itemprop="description">A learner</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备18042368号-1 </a>
+      <img src="/images/备案图标.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zero</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

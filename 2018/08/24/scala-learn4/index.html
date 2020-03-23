@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gwy1995.cn","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="控制结构if类三元表达式1val absValue&#x3D;if (a&lt;0) -a else a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala学习笔记4">
+<meta property="og:url" content="https://gwy1995.cn/2018/08/24/scala-learn4/index.html">
+<meta property="og:site_name" content="Zero Space">
+<meta property="og:description" content="控制结构if类三元表达式1val absValue&#x3D;if (a&lt;0) -a else a">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-24T05:31:45.000Z">
+<meta property="article:modified_time" content="2020-03-23T01:01:57.358Z">
+<meta property="article:author" content="Zero">
+<meta property="article:tag" content="scala">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gwy1995.cn/2018/08/24/scala-learn4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>scala学习笔记4 | Zero Space</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Zero Space</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Look up to the sky</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gwy1995.cn/2018/08/24/scala-learn4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Zero">
+      <meta itemprop="description" content="A learner">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zero Space">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          scala学习笔记4
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-24 13:31:45" itemprop="dateCreated datePublished" datetime="2018-08-24T13:31:45+08:00">2018-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-23 09:01:57" itemprop="dateModified" datetime="2020-03-23T09:01:57+08:00">2020-03-23</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="控制结构"><a href="#控制结构" class="headerlink" title="控制结构"></a>控制结构</h2><h3 id="if类三元表达式"><a href="#if类三元表达式" class="headerlink" title="if类三元表达式"></a>if类三元表达式</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> absValue=<span class="keyword">if</span> (a&lt;<span class="number">0</span>) -a <span class="keyword">else</span> a</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="match表达式"><a href="#match表达式" class="headerlink" title="match表达式"></a>match表达式</h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> i=<span class="number">10</span></span><br><span class="line">i <span class="keyword">match</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span> =&gt; println(<span class="string">"January"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span> =&gt; println(<span class="string">"February"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span> =&gt; println(<span class="string">"March"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span> =&gt; println(<span class="string">"April"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">5</span> =&gt; println(<span class="string">"May"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">6</span> =&gt; println(<span class="string">"June"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">7</span> =&gt; println(<span class="string">"July"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">8</span> =&gt; println(<span class="string">"August"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">9</span> =&gt; println(<span class="string">"September"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">10</span> =&gt; println(<span class="string">"October"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">11</span> =&gt; println(<span class="string">"November"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">12</span> =&gt; println(<span class="string">"December"</span>)</span><br><span class="line">	<span class="keyword">case</span> whoa =&gt; println(<span class="string">"Unexpected case: "</span> + whoa.toString)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将match返回值赋值</span></span><br><span class="line"><span class="keyword">val</span> month = i <span class="keyword">match</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span> =&gt; <span class="string">"January"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span> =&gt; <span class="string">"February"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span> =&gt; <span class="string">"March"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span> =&gt; <span class="string">"April"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">5</span> =&gt; <span class="string">"May"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">6</span> =&gt; <span class="string">"June"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">7</span> =&gt; <span class="string">"July"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">8</span> =&gt; <span class="string">"August"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">9</span> =&gt; <span class="string">"September"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">10</span> =&gt; <span class="string">"October"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">11</span> =&gt; <span class="string">"November"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">12</span> =&gt; <span class="string">"December"</span></span><br><span class="line">	<span class="keyword">case</span> _ =&gt; <span class="string">"Invalid month"</span> <span class="comment">// the default, catch-all</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// default </span></span><br><span class="line"><span class="comment">// 若无需赋值，则使用_</span></span><br><span class="line"><span class="keyword">case</span> _ =&gt; println(<span class="string">"Got a default match"</span>)</span><br><span class="line"><span class="comment">// 需要赋值，则输入一个变量</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">default</span> =&gt; println(<span class="keyword">default</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以匹配变量类型</span></span><br><span class="line"><span class="keyword">val</span> x:<span class="type">Any</span>=<span class="string">"a"</span></span><br><span class="line">x <span class="keyword">match</span> &#123; </span><br><span class="line">	<span class="keyword">case</span> s: <span class="type">String</span> =&gt; s + <span class="string">" is a String"</span></span><br><span class="line">	<span class="keyword">case</span> i: <span class="type">Int</span> =&gt; <span class="string">"Int"</span></span><br><span class="line">	<span class="keyword">case</span> f: <span class="type">Float</span> =&gt; <span class="string">"Float"</span></span><br><span class="line">	<span class="keyword">case</span> l: <span class="type">List</span>[_] =&gt; <span class="string">"List"</span></span><br><span class="line">	<span class="keyword">case</span> _ =&gt; <span class="string">"Unknown"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匹配多个值</span></span><br><span class="line"><span class="keyword">val</span> i = <span class="number">5</span> </span><br><span class="line">i <span class="keyword">match</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span> | <span class="number">3</span> | <span class="number">5</span> | <span class="number">7</span> | <span class="number">9</span> =&gt; println(<span class="string">"odd"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span> | <span class="number">4</span> | <span class="number">6</span> | <span class="number">8</span> | <span class="number">10</span> =&gt; println(<span class="string">"even"</span>) </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模式匹配</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">echoWhatYouGaveMe</span></span>(x: <span class="type">Any</span>): <span class="type">String</span> = x <span class="keyword">match</span> &#123;</span><br><span class="line">	<span class="comment">// 常数模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">0</span> =&gt; <span class="string">"zero"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="literal">true</span> =&gt; <span class="string">"true"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="string">"hello"</span>=&gt; <span class="string">"you said 'hello'"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">Nil</span> =&gt; <span class="string">"an empty list"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 序列模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">List</span>(<span class="number">0</span>,_,_) =&gt; <span class="string">"a three-element list with 0 as the first element"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">List</span>(<span class="number">1</span>,_*)=&gt; <span class="string">"a list beginning with 1,having any number of elements"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">Vector</span>(<span class="number">1</span>,_*)=&gt; <span class="string">"a vector starting with 1,having any number of elements"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 元组</span></span><br><span class="line">	<span class="keyword">case</span> (a,b)=&gt; <span class="string">s"got <span class="subst">$a</span> and <span class="subst">$b</span>"</span></span><br><span class="line">	<span class="keyword">case</span> (a,b,c)=&gt; <span class="string">s"got <span class="subst">$a</span>,<span class="subst">$b</span>,and <span class="subst">$c</span>"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 构造体模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">Person</span>(first,<span class="string">"Alexander"</span>) =&gt;<span class="string">s"found an Alexander,first name=<span class="subst">$first</span>"</span></span><br><span class="line">	<span class="keyword">case</span> <span class="type">Dog</span>(<span class="string">"Suka"</span>)=&gt; <span class="string">"found a dog named Suka"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 类型模式</span></span><br><span class="line">	<span class="keyword">case</span> s: <span class="type">String</span> =&gt;<span class="string">s"you gave me this string: <span class="subst">$s</span>"</span></span><br><span class="line">	<span class="keyword">case</span> i: <span class="type">Int</span> =&gt;<span class="string">s"thanks for the int: <span class="subst">$i</span>"</span></span><br><span class="line">	<span class="keyword">case</span> f: <span class="type">Float</span>=&gt;<span class="string">s"thanks for the float: <span class="subst">$f</span>"</span></span><br><span class="line">	<span class="keyword">case</span> a: <span class="type">Array</span>[<span class="type">Int</span>]=&gt;<span class="string">s"an array of int:<span class="subst">$&#123;a.mkString(",")&#125;</span>"</span></span><br><span class="line">	<span class="keyword">case</span> as:<span class="type">Array</span>[<span class="type">String</span>]=&gt;<span class="string">s"an array of strings:<span class="subst">$&#123;as.mkString(",")&#125;</span>"</span></span><br><span class="line">	<span class="keyword">case</span> d:<span class="type">Dog</span>=&gt;<span class="string">s"dog:<span class="subst">$&#123;d.name&#125;</span>"</span></span><br><span class="line">	<span class="keyword">case</span> list: <span class="type">List</span>[_]=&gt;<span class="string">s"thanks for the list:<span class="subst">$list</span>"</span></span><br><span class="line">	<span class="keyword">case</span> m:<span class="type">Map</span>[_,_]=&gt;m.toString</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 默认通配符模式</span></span><br><span class="line">	<span class="keyword">case</span> _=&gt; <span class="string">"Unknown"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/scala/" rel="tag"># scala</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/08/16/scala-learn3/" rel="prev" title="scala学习笔记3">
+      <i class="fa fa-chevron-left"></i> scala学习笔记3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/08/28/java-jdbc/" rel="next" title="java使用jdbc连接数据库">
+      java使用jdbc连接数据库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制结构"><span class="nav-number">1.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if类三元表达式"><span class="nav-number">1.1.</span> <span class="nav-text">if类三元表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match表达式"><span class="nav-number">1.2.</span> <span class="nav-text">match表达式</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zero"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Zero</p>
+  <div class="site-description" itemprop="description">A learner</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">沪ICP备18042368号-1 </a>
+      <img src="/images/备案图标.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zero</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
